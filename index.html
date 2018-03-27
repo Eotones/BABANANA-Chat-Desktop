@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BABANANA Chat Desktop</title>
+
+    <link rel="stylesheet" type="text/css" href="./assets/css/variables.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/global.css">
+</head>
+<body>
+    <nav class="nav js-nav">
+        <div class="drag"><h1 id="app_title">BABANANA Chat Desktop</h1></div>
+        
+    </nav>
+
+    <main class="content js-content">
+        <webview id="wv_kk" src="https://banana.eotones.net/t/"></webview>
+    </main>
+
+    <script>
+        require('./renderer-process/renderer-main');
+    </script>
+</body>
+</html>
