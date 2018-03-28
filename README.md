@@ -6,6 +6,11 @@
 
 ![BABANANA Chat Desktop](https://raw.githubusercontent.com/Eotones/BABANANA-Chat-Desktop/master/assets/readme_img/babanana_chat_desktop_05.png)
 
+## 使用說明
+
+* 遊戲中使用的話要把遊戲調成**視窗化全螢幕**才能讓這APP顯示在最上層
+* 設定選單在桌面右下角系統選單的圖示點右鍵
+* 視窗畫面點右鍵有重新整理的功能
 
 ## Building
 
