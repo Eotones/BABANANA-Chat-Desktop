@@ -4,6 +4,8 @@
 
 打包版本可以到 [Releases頁面](https://github.com/Eotones/BABANANA-Chat-Desktop/releases) 下載
 
+![BABANANA Chat Desktop](https://raw.githubusercontent.com/Eotones/BABANANA-Chat-Desktop/master/assets/readme_img/babanana_chat_desktop_05.png)
+
 
 ## Building
 
