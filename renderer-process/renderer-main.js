@@ -17,7 +17,7 @@ webview.addEventListener('dom-ready', () => {
             font-family: "Microsoft JhengHei", "Microsoft YaHei", Arial, 'LiHei Pro', sans-serif;
         }
         #tool_bar { display: none !important; }
-        .output_lines {
+        .output_lines, #announcements {
             font-size: 16px !important;
             font-weight: normal;
         }

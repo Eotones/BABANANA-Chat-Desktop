@@ -5,11 +5,13 @@
   "private": true,
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build_win32": "electron-packager . BABANANA-Chat-Desktop --out=./build/ --overwrite=true --platform=win32 --arch=x64 --version=0.36.4 --icon=assets/img/app.ico --asar=true --ignore=node_modules/electron-* --ignore=node_modules/.bin --ignore=.git --ignore=dist --prune=true "
   },
   "author": "EOTONES",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^1.8.4"
+    "electron": "^1.8.4",
+    "electron-packager": "^11.2.0"
   }
 }
