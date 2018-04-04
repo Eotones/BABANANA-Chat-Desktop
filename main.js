@@ -9,8 +9,8 @@ const url = require('url');
 require('./common-process/context-menu');
 
 //視窗大小
-const window_width = 300;
-const window_height = 400;
+const window_width = 500;
+const window_height = 500;
 
 // 保持一個對於 window 對象的全局引用，如果你不這樣做，
 // 當 JavaScript 對象被垃圾回收， window 會被自動地關閉
@@ -29,7 +29,8 @@ function createWindow () {
     win = new BrowserWindow({
         width: window_width,
         height: window_height,
-        transparent: true, //視窗透明
+        //transparent: true, //視窗透明
+        backgroundColor: '#000000',
         frame: false, //視窗外框
         alwaysOnTop: true, //視窗置頂
         x: (screen_size.width - window_width),
@@ -83,6 +84,12 @@ function createWindow () {
     tray.on('click', (event) => {
         console.log(event);
     });
+    */
+
+    /*
+    win.webContents.executeJavaScript(`
+        document.getElementById("winButtonClose").addEventListener('click',function(){win.close()});
+    `);
     */
 }
 

@@ -40,6 +40,16 @@ nav {
     /*background-color: rgba(0, 0, 0, 0.5);*/
 }
 
+.win_btns {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+.winButton {
+    padding: 10px;
+    display: inline-block;
+}
+
 .content {
     /*padding: 10px;*/
     height: calc(100% - 40px);

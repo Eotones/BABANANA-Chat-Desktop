@@ -7,10 +7,38 @@ const {shell, remote} = require('electron');
 const {app, Menu, MenuItem} = remote;
 // remote 可以調用 main 進程對象的方法
 
+const win2 = remote.getCurrentWindow();
+
+//當渲染進程載入完成時
+document.addEventListener('DOMContentLoaded', function () {
+    //視窗縮小到工具列
+    document.getElementById("winButtonMinimize").addEventListener('click',function(){
+        win2.minimize();
+    });
+    //縮放視窗
+    let winButtonMaximize;
+    winButtonMaximize = document.getElementById("winButtonMaximize").addEventListener('click',function(){
+        console.log(remote.getCurrentWindow().isMaximized());
+        if(win2.isMaximized()){
+            //win2.unmaximize();
+            win2.restore();
+            //remote.getCurrentWindow().setSize(1000, 800, true);
+        }else{
+            win2.maximize();
+            //remote.getCurrentWindow().setSize(1000, 800, true);
+        }
+    });
+    //關閉視窗
+    document.getElementById("winButtonClose").addEventListener('click',function(){
+        app.quit();
+    });
+});
+
+
 const webview = document.getElementById('wv_kk');
 
+//要注意webview中的網頁重新載入時會再次觸發這個事件,要注意使用
 webview.addEventListener('dom-ready', () => {
-    
     //自訂webview內網頁的CSS
     webview.insertCSS(`
         body {
