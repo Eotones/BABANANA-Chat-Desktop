@@ -9,7 +9,7 @@ const url = require('url');
 require('./common-process/context-menu');
 
 //視窗大小
-const window_width = 500;
+const window_width = 350;
 const window_height = 500;
 
 // 保持一個對於 window 對象的全局引用，如果你不這樣做，
