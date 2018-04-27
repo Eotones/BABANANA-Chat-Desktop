@@ -1,6 +1,6 @@
 {
   "name": "electron_app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "test",
   "private": true,
   "main": "main.js",
@@ -11,7 +11,7 @@
   "author": "EOTONES",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^1.8.4",
+    "electron": "^1.8.6",
     "electron-packager": "^11.2.0"
   }
 }
