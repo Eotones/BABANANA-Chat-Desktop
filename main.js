@@ -29,8 +29,8 @@ function createWindow () {
     win = new BrowserWindow({
         width: window_width,
         height: window_height,
-        //transparent: true, //視窗透明
-        backgroundColor: '#000000',
+        transparent: true, //視窗透明
+        //backgroundColor: '#000000',
         frame: false, //視窗外框
         alwaysOnTop: true, //視窗置頂
         x: (screen_size.width - window_width),

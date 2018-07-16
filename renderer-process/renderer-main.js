@@ -16,6 +16,14 @@ document.addEventListener('DOMContentLoaded', function () {
         win2.minimize();
     });
     //縮放視窗
+    /*
+        win7在視窗設為背景透明時`isMaximized()`無法正確偵測視窗大小,
+        導致放大後無法正確偵測狀態來縮小視窗
+        若視窗設定為不透明時則不會有這個問題
+        看英文討論區說這個是electron官方的bug,而且存在很久看起來沒有打算修正,
+        所以暫時取消視窗縮放按紐的功能(透明視窗是這個聊天室程式很重要的一環,不能取消)
+    */
+    /*
     let winButtonMaximize;
     winButtonMaximize = document.getElementById("winButtonMaximize").addEventListener('click',function(){
         console.log(remote.getCurrentWindow().isMaximized());
@@ -28,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //remote.getCurrentWindow().setSize(1000, 800, true);
         }
     });
+    */
     //關閉視窗
     document.getElementById("winButtonClose").addEventListener('click',function(){
         app.quit();
