@@ -1,6 +1,6 @@
 {
   "name": "babanana-chat-desktop",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "BABANANA Chat Desktop 為 BABANANA Chat 的桌面版應用程式。",
   "private": true,
   "main": "main.js",

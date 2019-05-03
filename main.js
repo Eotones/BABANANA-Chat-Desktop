@@ -59,7 +59,7 @@ function createWindow () {
 
 
     // 畫面右下的系統圖示
-    tray = new Tray('./assets/img/app.ico');
+    tray = new Tray( path.join(__dirname, 'assets/img/app.ico') );
     const template = [
         {label: 'BABANANA Chat Desktop', enabled: false},
         {type: 'separator'},
