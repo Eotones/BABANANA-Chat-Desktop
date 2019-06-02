@@ -2,7 +2,7 @@
 
 **BABANANA Chat Desktop** 是 [BABANANA Chat](https://banana.eotones.net/) 的桌面版應用程式，目前基本功能可以使用了。
 
-![BABANANA Chat Desktop](https://raw.githubusercontent.com/Eotones/BABANANA-Chat-Desktop/master/assets/readme_img/babanana_chat_desktop_06_2.png)
+![BABANANA Chat Desktop](https://raw.githubusercontent.com/Eotones/BABANANA-Chat-Desktop/master/assets/readme_img/babanana_chat_desktop_07_2.png)
 
 ## 下載
 
