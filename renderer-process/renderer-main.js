@@ -1,4 +1,5 @@
 // 渲染進程 renderer-process
+console.log('[renderer-process] start');
 
 // <webview>
 // https://electronjs.org/docs/api/webview-tag
@@ -8,6 +9,33 @@ const {app, Menu, MenuItem} = remote;
 // remote 可以調用 main 進程對象的方法
 
 const win2 = remote.getCurrentWindow();
+const webview = document.getElementById('wv_kk');
+
+
+//右鍵選單
+/*
+const menu = new Menu();
+menu.append(new MenuItem( {label: 'BABANANA Chat Desktop', enabled: false} ));
+menu.append(new MenuItem( {type: 'separator'}));
+menu.append(new MenuItem( {label: '置頂', type: 'checkbox', checked: true} ));
+menu.append(new MenuItem( {label: '防止點擊', type: 'checkbox', checked: false} ));
+menu.append(new MenuItem( {type: 'separator'}));
+menu.append(new MenuItem( {label: '說明', click() { require('electron').shell.openExternal('https://hackmd.io/s/B183d6iwG') }} ));
+*/
+
+const template = [
+    {label: 'BABANANA Chat Desktop', enabled: false},
+    {type: 'separator'},
+    //{label: '置頂', type: 'checkbox', checked: true},
+    //{label: '防止點擊', type: 'checkbox', checked: false},
+    {label: '重新整理', click() { webview.reload(); } },
+    {type: 'separator'},
+    {label: '說明', click() { require('electron').shell.openExternal('https://hackmd.io/s/B183d6iwG') } },
+    {label: '關閉', click() { app.quit(); } }
+];
+
+const contextMenu = Menu.buildFromTemplate(template);
+
 
 //當渲染進程載入完成時
 document.addEventListener('DOMContentLoaded', function () {
@@ -41,22 +69,34 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("winButtonClose").addEventListener('click',function(){
         app.quit();
     });
+
+    
+
+    window.addEventListener('contextmenu', (e) => {
+        console.log('[event] contextmenu');
+        e.preventDefault();
+        contextMenu.popup({ window: remote.getCurrentWindow() });
+    }, true);
+
+    
 });
 
 
-const webview = document.getElementById('wv_kk');
 
 //要注意webview中的網頁重新載入時會再次觸發這個事件,要注意使用
 webview.addEventListener('dom-ready', () => {
+    //webview.openDevTools();
+
     //自訂webview內網頁的CSS
     webview.insertCSS(`
         html {
             margin-bottom: 40px;
         }
         body {
-            font-family: "Microsoft JhengHei", "Microsoft YaHei", Arial, 'LiHei Pro', sans-serif;
+            /*font-family: "Microsoft JhengHei", "Microsoft YaHei", Arial, 'LiHei Pro', sans-serif;*/
             background-color: rgba(0, 0, 0, 0) !important;
         }
+
         #tool_bar {
             /*display: none !important;*/
             top: initial !important;
@@ -80,8 +120,12 @@ webview.addEventListener('dom-ready', () => {
         }
 
         .output_lines, #announcements {
-            font-size: 16px !important;
+            font-size: 1rem !important;
             font-weight: normal;
+        }
+        .pod, .kk_time {
+            font-size: 0.7rem !important;
+            font-family: Arial, sans-serif !important;
         }
 
         /* scrollbar */
@@ -106,7 +150,19 @@ webview.addEventListener('dom-ready', () => {
     //自訂webview內網頁的JS
     webview.executeJavaScript(`
         //alert("executeJavaScript test");
+
+        // window.addEventListener('contextmenu', (e) => {
+        //     e.preventDefault();
+        //     //alert("executeJavaScript test");
+        // }, false);
     `);
+
+
+    // webview.addEventListener('contextmenu', (e) => {
+    //     console.log('[event] contextmenu');
+    //     e.preventDefault();
+    //     contextMenu.popup({ window: win2 });
+    // }, false);
 });
 
 // 將網頁中的連結開在外部瀏覽器
@@ -117,31 +173,3 @@ webview.addEventListener('new-window', (e) => {
     }
 });
 
-//右鍵選單
-/*
-const menu = new Menu();
-menu.append(new MenuItem( {label: 'BABANANA Chat Desktop', enabled: false} ));
-menu.append(new MenuItem( {type: 'separator'}));
-menu.append(new MenuItem( {label: '置頂', type: 'checkbox', checked: true} ));
-menu.append(new MenuItem( {label: '防止點擊', type: 'checkbox', checked: false} ));
-menu.append(new MenuItem( {type: 'separator'}));
-menu.append(new MenuItem( {label: '說明', click() { require('electron').shell.openExternal('https://hackmd.io/s/B183d6iwG') }} ));
-*/
-
-const template = [
-    {label: 'BABANANA Chat Desktop', enabled: false},
-    {type: 'separator'},
-    //{label: '置頂', type: 'checkbox', checked: true},
-    //{label: '防止點擊', type: 'checkbox', checked: false},
-    {label: '重新整理', click() { webview.reload(); } },
-    {type: 'separator'},
-    {label: '說明', click() { require('electron').shell.openExternal('https://hackmd.io/s/B183d6iwG') } },
-    {label: '關閉', click() { app.quit(); } }
-];
-
-const contextMenu = Menu.buildFromTemplate(template);
-
-window.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    contextMenu.popup(remote.getCurrentWindow());
-}, false)

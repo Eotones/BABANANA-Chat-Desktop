@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://banana.eotones.net/">-->
+
     <title>BABANANA Chat Desktop</title>
 
     <link rel="stylesheet" type="text/css" href="./assets/css/variables.css">
@@ -43,9 +47,7 @@
         <webview id="wv_kk" src="https://banana.eotones.net/"></webview>
     </main>
 
-    <script>
-        require('./renderer-process/renderer-main');
-    </script>
+    <script src="./renderer-process/renderer-main.js"></script>
 </body>
 
 </html>

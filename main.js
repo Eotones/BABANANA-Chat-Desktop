@@ -1,4 +1,5 @@
 // 主進程 main-process
+console.log('[main-process] start');
 
 const electron = require('electron');
 const {app, BrowserWindow, Menu, Tray} = electron;
@@ -35,16 +36,22 @@ function createWindow () {
         alwaysOnTop: true, //視窗置頂
         x: (screen_size.width - window_width),
         y: 200,
+        webPreferences: {
+            webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
+            nodeIntegration: true, //同上, 在index.html中啟用require()
+            //enableRemoteModule: true,
+        },
     });
 
     //win.setIgnoreMouseEvents(true); //滑鼠點擊穿透
 
     // 然後加載應用的 index.html。
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
+    // win.loadURL(url.format({ //舊
+    //     pathname: path.join(__dirname, 'index.html'),
+    //     protocol: 'file:',
+    //     slashes: true
+    // }));
+    win.loadFile('index.html');
 
     // 打開開發者工具。
     //win.webContents.openDevTools()
@@ -60,6 +67,7 @@ function createWindow () {
 
     // 畫面右下的系統圖示
     tray = new Tray( path.join(__dirname, 'assets/img/app.ico') );
+
     const template = [
         {label: 'BABANANA Chat Desktop', enabled: false},
         {type: 'separator'},
@@ -71,6 +79,8 @@ function createWindow () {
             //console.log(e.checked);
             e.checked? win.setIgnoreMouseEvents(true) : win.setIgnoreMouseEvents(false);
         }},
+        {type: 'separator'},
+        {label: '重新整理', click() { win.webContents.reload(); } },
         {type: 'separator'},
         {label: '說明', click() { require('electron').shell.openExternal('https://hackmd.io/s/B183d6iwG') } },
         {label: '關閉', click() { app.quit(); } }
@@ -96,24 +106,23 @@ function createWindow () {
 // Electron 會在初始化後並準備
 // 創建瀏覽器窗口時，調用這個函數。
 // 部分 API 在 ready 事件觸發後才能使用。
-app.on('ready', createWindow);
+//app.on('ready', createWindow); //舊
+app.whenReady().then(()=>{
+    createWindow();
+});
 
-// 當全部窗口關閉時退出。
-app.on('window-all-closed', () => {
-    // 在 macOS 上，除非用戶用 Cmd + Q 確定地退出，
-    // 否則絕大部分應用及其菜單欄會保持激活。
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-})
-
-app.on('activate', () => {
-    // 在macOS上，當單擊dock 圖標並且沒有其他窗口打開時，
-    // 通常在應用程序中重新創建一個窗口。
-    if (win === null) {
-        createWindow();
-    }
-})
+// Quit when all windows are closed.
+app.on('window-all-closed', function () {
+    // On macOS it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') app.quit();
+});
+  
+app.on('activate', function () {
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
 
 // 在這文件，你可以續寫應用剩下主進程代碼。
 // 也可以拆分成幾個文件，然後用 require 導入。

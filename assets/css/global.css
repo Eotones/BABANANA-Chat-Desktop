@@ -49,6 +49,12 @@ nav {
     padding: 10px;
     display: inline-block;
 }
+.winButton:hover {
+    background-color: rgba(100, 100, 100, 0.5);
+}
+#winButtonClose:hover {
+    background-color: rgba(255, 0, 0, 0.5);
+}
 
 .content {
     /*padding: 10px;*/
@@ -65,4 +71,11 @@ nav {
     right: 0;
     bottom: 0;
     left: 0;
+
+    /*pointer-events: none;*/ /*可穿透圖層(滑鼠點不到)*/
 }
+/*
+input, button {
+    pointer-events: auto;
+}
+*/
