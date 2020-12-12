@@ -4,7 +4,7 @@ console.log('[main-process] start');
 const electron = require('electron');
 const {app, BrowserWindow, Menu, Tray} = electron;
 const path = require('path');
-const url = require('url');
+//const url = require('url');
 
 // 定義系統選單+右鍵選單
 require('./common-process/context-menu');
@@ -39,7 +39,7 @@ function createWindow () {
         webPreferences: {
             webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
             nodeIntegration: true, //同上, 在index.html中啟用require()
-            //enableRemoteModule: true,
+            enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
         },
     });
 
@@ -54,7 +54,7 @@ function createWindow () {
     win.loadFile('index.html');
 
     // 打開開發者工具。
-    //win.webContents.openDevTools()
+    //win.webContents.openDevTools();
 
     // 當 window 被關閉，這個事件會被觸發。
     win.on('closed', () => {
