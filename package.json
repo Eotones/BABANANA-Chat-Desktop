@@ -12,8 +12,8 @@
   "author": "EOTONES",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^8.5.2",
-    "electron-packager": "^15.1.0"
+    "electron": "^8.5.5",
+    "electron-packager": "^15.2.0"
   },
   "dependencies": {}
 }
