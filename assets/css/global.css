@@ -1,11 +1,21 @@
+@import url("../../node_modules/bootstrap-icons/font/bootstrap-icons.css");
+
 * {
     -webkit-app-region: no-drag; /*不可點選拖曳視窗的區域*/
     box-sizing: border-box;
+
+    --app-title-height: 40px;
+    --top-menu-height: 40px;
+}
+
+html {
+    font-size: 1rem;
 }
 
 body {
     background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
+    font-size: 1rem;
 
     margin: 0;
     width: 100%;
@@ -18,25 +28,32 @@ body {
 nav {
     background-color: rgba(0, 0, 0, 0.5);
     color: #000;
+    font-size: 1rem;
+
+    min-height: var(--app-title-height);
 }
 
 #app_title {
     margin: 0;
-    padding: 10px 10px 10px 10px;
+    padding: 0 20px 0 15px;
     font-weight: normal;
-    font-size: 12px;
+    font-size: 1rem;
+    line-height: var(--app-title-height);
+    
     pointer-events: none; /*可穿透圖層(滑鼠點不到)*/
-    color: #fff;
+    color: #ccc;
     display: block;
     text-align: left;
     -webkit-app-region: drag; /*可點選拖曳視窗的區域*/
+
+    font-family: Arial, 'LiHei Pro', sans-serif;
 }
 
 .drag {
     -webkit-app-region: drag; /*可點選拖曳視窗的區域*/
 
     width: 100%;
-    min-height: 40px;
+    
     /*background-color: rgba(0, 0, 0, 0.5);*/
 }
 
@@ -56,9 +73,18 @@ nav {
     background-color: rgba(255, 0, 0, 0.5);
 }
 
+.top_menu {
+    background-color: rgba(30, 30, 30, 0.5);
+    min-height: var(--top-menu-height);
+    line-height: var(--top-menu-height);
+    padding: 0 1.5em 0 1.5em;
+    font-size: 14px;
+    color: #ccc;
+}
+
 .content {
     /*padding: 10px;*/
-    height: calc(100% - 40px);
+    height: calc(100% - var(--app-title-height));
     overflow: hidden;
 }
 
@@ -67,7 +93,7 @@ nav {
     height: calc(100% - 40px);*/
     overflow: hidden;
     position: fixed;
-    top: 40px;
+    top: calc(var(--app-title-height) + var(--top-menu-height));
     right: 0;
     bottom: 0;
     left: 0;
