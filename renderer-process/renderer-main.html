@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://banana.eotones.net/">-->
+
+    <title>BABANANA Chat Desktop</title>
+
+    <link rel="stylesheet" type="text/css" href="../assets/css/global.css">
+</head>
+
+<body>
+    <header class="nav js-nav">
+        <div class="drag">
+            <h1 id="app_title"><i class="bi bi-chat"></i> BABANANA Chat</h1>
+        </div>
+        <div class="win_btns">
+            <div id="winButtonMinimize" class="winButton">
+                <svg name="TitleBarMinimize" width="12" height="12" viewBox="0 0 12 12">
+                    <rect fill="#ffffff" width="10" height="1" x="1" y="6"></rect>
+                </svg>
+            </div>
+            
+            <!--
+            <div id="winButtonMaximize" class="winButton">
+                <svg name="TitleBarMaximize" width="12" height="12" viewBox="0 0 12 12">
+                    <rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff"></rect>
+                </svg>
+            </div>
+            -->
+            
+            <div id="winButtonClose" class="winButton">
+                <svg name="TitleBarClose" width="12" height="12" viewBox="0 0 12 12">
+                    <polygon fill="#ffffff" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <nav class="top_menu">
+        <div class="top_menu_left">
+            <button>外部</button><button>本機</button>
+        </div>
+        <div class="top_menu_right">
+            <button><i class="bi bi-gear-fill"></i></button>
+        </div>
+        <div class="clear_both"></div>
+    </nav>
+
+    <main class="content js-content">
+        <webview id="wv_kk" src="https://banana.eotones.net/"></webview>
+    </main>
+
+    <footer>
+        <div id="footer_msg">測試</div>
+    </footer>
+
+    <script src="./renderer-main.js"></script>
+</body>
+
+</html>

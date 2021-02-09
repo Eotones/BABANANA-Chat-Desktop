@@ -11,14 +11,13 @@
 
     <title>BABANANA Chat Desktop</title>
 
-    <link rel="stylesheet" type="text/css" href="./assets/css/variables.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/global.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/global.css">
 </head>
 
 <body>
-    <nav class="nav js-nav">
+    <header class="nav js-nav">
         <div class="drag">
-            <h1 id="app_title"><i class="bi bi-chat"></i> BABANANA Chat</h1>
+            <h1 id="app_title"><i class="bi bi-chat"></i> BABANANA Chat 2</h1>
         </div>
         <div class="win_btns">
             <div id="winButtonMinimize" class="winButton">
@@ -41,15 +40,27 @@
                 </svg>
             </div>
         </div>
+    </header>
+
+    <nav class="top_menu">
+        <div class="top_menu_left">
+            <button>外部</button><button>本機</button>
+        </div>
+        <div class="top_menu_right">
+            <button><i class="bi bi-gear-fill"></i></button>
+        </div>
+        <div class="clear_both"></div>
     </nav>
 
-    <div class="top_menu">測試</div>
-
     <main class="content js-content">
-        <webview id="wv_kk" src="https://banana.eotones.net/"></webview>
+        <!--<webview id="wv_kk" src="https://banana.eotones.net/"></webview>-->
     </main>
 
-    <script src="./renderer-process/renderer-main.js"></script>
+    <footer>
+        <div id="footer_msg">測試</div>
+    </footer>
+
+    <script src="./renderer-chat-window.js"></script>
 </body>
 
 </html>

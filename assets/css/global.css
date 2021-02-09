@@ -1,11 +1,13 @@
-@import url("../../node_modules/bootstrap-icons/font/bootstrap-icons.css");
+@import url("./variables.css");
+@import url("../../node_modules/bootstrap-icons/font/bootstrap-icons.css"); /*bootstrap-icons字體*/
 
 * {
     -webkit-app-region: no-drag; /*不可點選拖曳視窗的區域*/
     box-sizing: border-box;
 
     --app-title-height: 40px;
-    --top-menu-height: 40px;
+    --top-menu-height: 30px;
+    --footer-height: 40px;
 }
 
 html {
@@ -25,7 +27,7 @@ body {
     font-family: "Microsoft JhengHei", "Microsoft YaHei", Arial, 'LiHei Pro', sans-serif;
 }
 
-nav {
+header {
     background-color: rgba(0, 0, 0, 0.5);
     color: #000;
     font-size: 1rem;
@@ -39,19 +41,17 @@ nav {
     font-weight: normal;
     font-size: 1rem;
     line-height: var(--app-title-height);
-    
-    pointer-events: none; /*可穿透圖層(滑鼠點不到)*/
+
     color: #ccc;
     display: block;
     text-align: left;
-    -webkit-app-region: drag; /*可點選拖曳視窗的區域*/
 
     font-family: Arial, 'LiHei Pro', sans-serif;
 }
 
-.drag {
+.drag, .drag * {
     -webkit-app-region: drag; /*可點選拖曳視窗的區域*/
-
+    pointer-events: none; /*可穿透圖層(滑鼠點不到)*/
     width: 100%;
     
     /*background-color: rgba(0, 0, 0, 0.5);*/
@@ -77,23 +77,58 @@ nav {
     background-color: rgba(30, 30, 30, 0.5);
     min-height: var(--top-menu-height);
     line-height: var(--top-menu-height);
-    padding: 0 1.5em 0 1.5em;
+    margin: 0;
+    padding: 0 0 0 0;
     font-size: 14px;
     color: #ccc;
 }
 
+.top_menu button {
+    margin: 0 1px 0 0;
+    padding: 0 1em;
+    border: none;
+    min-height: var(--top-menu-height);
+    line-height: var(--top-menu-height);
+    background-color: rgba(30, 30, 30, 0.8);
+    color: #ccc;
+}
+
+.top_menu button:hover {
+    background-color: rgba(100, 100, 100, 0.5);
+}
+
+.top_menu_left {
+    float: left;
+    height: var(--top-menu-height);
+}
+.top_menu_right {
+    float: right;
+    height: var(--top-menu-height);
+}
+.top_menu_right button {
+    margin: 0 0 0 1px;
+}
+.clear_both {
+    clear: both;
+    border-bottom: 1px solid transparent;
+}
+
 .content {
     /*padding: 10px;*/
-    height: calc(100% - var(--app-title-height));
     overflow: hidden;
+    position: fixed;
+    top: calc(var(--app-title-height) + var(--top-menu-height));
+    right: 0;
+    bottom: var(--footer-height);
+    left: 0;
 }
 
 #wv_kk {
     /*width:100%;
     height: calc(100% - 40px);*/
     overflow: hidden;
-    position: fixed;
-    top: calc(var(--app-title-height) + var(--top-menu-height));
+    position: absolute;
+    top: 0;
     right: 0;
     bottom: 0;
     left: 0;
@@ -105,3 +140,20 @@ input, button {
     pointer-events: auto;
 }
 */
+
+
+footer {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #aaa;
+    font-size: 0.8rem;
+
+    min-height: var(--footer-height);
+    line-height: var(--footer-height);
+
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    padding: 0 1em;
+}

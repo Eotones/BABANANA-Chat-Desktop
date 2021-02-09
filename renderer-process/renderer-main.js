@@ -4,11 +4,13 @@ console.log('[renderer-process] start');
 // <webview>
 // https://electronjs.org/docs/api/webview-tag
 
-const {shell, remote} = require('electron');
+const {shell, remote, ipcRenderer} = require('electron');
 const {app, Menu, MenuItem} = remote;
 // remote 可以調用 main 進程對象的方法
 
-const win2 = remote.getCurrentWindow();
+const date_format = require('../libs/date_format.js');
+
+const win_main = remote.getCurrentWindow();
 const webview = document.getElementById('wv_kk');
 
 
@@ -41,7 +43,7 @@ const contextMenu = Menu.buildFromTemplate(template);
 document.addEventListener('DOMContentLoaded', function () {
     //視窗縮小到工具列
     document.getElementById("winButtonMinimize").addEventListener('click',function(){
-        win2.minimize();
+        win_main.minimize();
     });
     //縮放視窗
     /*
@@ -70,14 +72,42 @@ document.addEventListener('DOMContentLoaded', function () {
         app.quit();
     });
 
-    
-
     window.addEventListener('contextmenu', (e) => {
         console.log('[event] contextmenu');
         e.preventDefault();
         contextMenu.popup({ window: remote.getCurrentWindow() });
     }, true);
 
+    //ipcRenderer
+    // ipcRenderer.on('ping', (event, message) => {
+    //     //console.log(message); // Prints 'whoooooooh!'
+    //     document.querySelector("#footer_msg").textContent = message;
+    // });
+
+    //ipcRenderer.send('main-to-chat', 'test');
+
+    //傳送視窗載入完成狀態
+    //(主進程本身有偵測視窗載入完成的狀況,另外再寫ipc通訊是可以讓程式依需求往後調整延遲執行)
+    // ipcRenderer.send('win-loaded', 'main-window');
+
+    //當兩個視窗都載入完成時才讓兩個視窗進行通訊
+    ipcRenderer.on('win-loaded', (event, message) => {
+        if(message === 'all-windows-loaded') {
+            setInterval(() => {
+                let datetime = date_format.format(new Date());
+                document.querySelector("#footer_msg").textContent = `傳送: ${datetime}`;
+        
+                //使用ipc通訊讓兩個視窗進行通訊
+                //  renderer-main.js(renderer-process) --> main.js(main-process)
+                //  main.js(main-process) --> renderer-chat-window.js(renderer-process)
+                ipcRenderer.send('renderer-to-main', datetime);
+            }, 1000);
+        }
+    });
+
+    // setTimeout(()=>{
+        
+    // }, 3000);
     
 });
 
@@ -88,6 +118,7 @@ webview.addEventListener('dom-ready', () => {
     //webview.openDevTools();
 
     //自訂webview內網頁的CSS
+    //這個語法被歸類在CSP的 style-src 'unsafe-inline' 當中
     webview.insertCSS(`
         html {
             margin-bottom: 40px;
@@ -157,7 +188,8 @@ webview.addEventListener('dom-ready', () => {
         // }, false);
     `);
 
-
+    //在webview中使用右鍵選單
+    //舊版electron可用,但新版失效
     // webview.addEventListener('contextmenu', (e) => {
     //     console.log('[event] contextmenu');
     //     e.preventDefault();
