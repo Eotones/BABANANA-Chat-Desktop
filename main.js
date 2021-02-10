@@ -2,7 +2,7 @@
 console.log('[main-process] start');
 
 const electron = require('electron');
-const {app, BrowserWindow, Menu, Tray, ipcMain, screen} = electron;
+const {app, BrowserWindow, Menu, Tray, ipcMain, screen, shell} = electron;
 const path = require('path');
 //const url = require('url');
 
@@ -12,8 +12,16 @@ const path = require('path');
 //require('./common-process/context-menu');
 
 //視窗大小
-const window_width = 350;
-const window_height = 500;
+const window_size = {
+    main: {
+        width: 700,
+        height: 500
+    },
+    chat: {
+        width: 350,
+        height: 500
+    }
+};
 
 // 保持一個對於 window 對象的全局引用，如果你不這樣做，
 // 當 JavaScript 對象被垃圾回收， window 會被自動地關閉
@@ -33,24 +41,21 @@ let tray = null;
 
 
 const createWindow = {
-    main: function(){
-        //取得桌面可使用區域寬高 (通常是螢幕解析度扣掉系統工具列)
-        let screen_size = screen.getPrimaryDisplay().workAreaSize;
-        //console.log(screen_size.width, screen_size.height);
-        
+    main: function(screen_size){
         // 創建瀏覽器窗口。
         win['main'] = new BrowserWindow({
-            width: window_width,
-            height: window_height,
+            width: window_size.main.width,
+            height: window_size.main.height,
             //transparent: true, //視窗透明
             backgroundColor: '#000000',
             frame: false, //視窗外框
-            alwaysOnTop: true, //視窗置頂
-            x: (screen_size.width - window_width - window_width -10),
+            alwaysOnTop: false, //視窗置頂
+            x: (screen_size.width - window_size.chat.width - window_size.main.width -10),
             y: 200,
             webPreferences: {
                 webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
                 nodeIntegration: true, //同上, 在index.html中啟用require()
+                //contextIsolation: false,
                 enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
             },
         });
@@ -58,12 +63,7 @@ const createWindow = {
         //win.setIgnoreMouseEvents(true); //滑鼠點擊穿透
 
         // 然後加載應用的 index.html。
-        // win.loadURL(url.format({ //舊
-        //     pathname: path.join(__dirname, 'index.html'),
-        //     protocol: 'file:',
-        //     slashes: true
-        // }));
-        win['main'].loadFile(path.join(__dirname, 'renderer-process/renderer-main.html'));
+        win['main'].loadFile( path.join(__dirname, 'renderer-process/renderer-main.html') );
 
         // 打開開發者工具。
         //win.webContents.openDevTools();
@@ -76,38 +76,6 @@ const createWindow = {
             win = null;
         });
 
-
-        // 畫面右下的系統圖示
-        tray = new Tray( path.join(__dirname, 'assets/img/app.ico') );
-
-        const template = [
-            {label: 'BABANANA Chat Desktop', enabled: false},
-            {type: 'separator'},
-            {label: '置頂', type: 'checkbox', checked: true, click(e){
-                //console.log(e.checked);
-                e.checked? win_main.setAlwaysOnTop(true) : win_main.setAlwaysOnTop(false);
-            }},
-            {label: '防止點擊', type: 'checkbox', checked: false, click(e){
-                //console.log(e.checked);
-                e.checked? win_main.setIgnoreMouseEvents(true) : win_main.setIgnoreMouseEvents(false);
-            }},
-            {type: 'separator'},
-            {label: '重新整理', click() { win_main.webContents.reload(); } },
-            {type: 'separator'},
-            {label: '說明', click() { require('electron').shell.openExternal('https://hackmd.io/s/B183d6iwG') } },
-            {label: '關閉', click() { app.quit(); } }
-        ];
-
-        const contextMenu = Menu.buildFromTemplate(template);
-
-        tray.setToolTip('BABANANA Chat Desktop');
-        tray.setContextMenu(contextMenu);
-        /*
-        tray.on('click', (event) => {
-            console.log(event);
-        });
-        */
-
         /*
         win.webContents.executeJavaScript(`
             document.getElementById("winButtonClose").addEventListener('click',function(){win.close()});
@@ -116,7 +84,7 @@ const createWindow = {
 
         win['main'].webContents.on('did-finish-load', () => {
             win_loaded_main = true;
-            this.ipcCheck();
+            this._win_load_check();
             
             win['main'].webContents.send('ping', 'whoooooooh!');
 
@@ -130,39 +98,29 @@ const createWindow = {
             // });
         });
     },
-    chat: function(){
-        //取得桌面可使用區域寬高 (通常是螢幕解析度扣掉系統工具列)
-        let screen_size = screen.getPrimaryDisplay().workAreaSize;
-        //console.log(screen_size.width, screen_size.height);
-
+    chat: function(screen_size){
         // 創建瀏覽器窗口。
         win['chat'] = new BrowserWindow({
-            width: window_width,
-            height: window_height,
+            width: window_size.chat.width,
+            height: window_size.chat.height,
             transparent: true, //視窗透明
             //backgroundColor: '#000000',
             frame: false, //視窗外框
             alwaysOnTop: true, //視窗置頂
-            x: (screen_size.width - window_width),
+            x: (screen_size.width - window_size.chat.width),
             y: 200,
             webPreferences: {
                 webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
                 nodeIntegration: true, //同上, 在index.html中啟用require()
+                //contextIsolation: false,
                 enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
             },
         });
 
-        
-
         //win.setIgnoreMouseEvents(true); //滑鼠點擊穿透
 
         // 然後加載應用的 index.html。
-        // win.loadURL(url.format({ //舊
-        //     pathname: path.join(__dirname, 'index.html'),
-        //     protocol: 'file:',
-        //     slashes: true
-        // }));
-        win['chat'].loadFile(path.join(__dirname, 'renderer-process/renderer-chat-window.html'));
+        win['chat'].loadFile( path.join(__dirname, 'renderer-process/renderer-chat-window.html') );
 
         // 打開開發者工具。
         //win.webContents.openDevTools();
@@ -177,7 +135,7 @@ const createWindow = {
 
         win['chat'].webContents.on('did-finish-load', () => {
             win_loaded_chat = true;
-            this.ipcCheck();
+            this._win_load_check();
             
             win['chat'].setIgnoreMouseEvents(true); //防止點擊
             
@@ -189,32 +147,92 @@ const createWindow = {
             // }, 1000);
         });
 
-        
-
         ipcMain.on('renderer-to-main', (event, arg) => {
             win['chat'].webContents.send('main-to-chat', arg);
         });
     },
-    ipcCheck:function(){
-        //當兩個視窗都載入完成時才讓兩個視窗進行通訊
-        // ipcMain.on('win-loaded', (event, arg) => {
-        //     console.log(`[ipc: win-loaded] ${arg}`);
+    // _ipcCheck:function(){
+    //     //當兩個視窗都載入完成時才讓兩個視窗進行通訊
+    //     ipcMain.on('win-loaded', (event, arg) => {
+    //         console.log(`[ipc: win-loaded] ${arg}`);
 
-        //     if(arg === 'main-window') win_loaded_main = true;
-        //     if(arg === 'chat-window') win_loaded_chat = true;
+    //         if(arg === 'main-window') win_loaded_main = true;
+    //         if(arg === 'chat-window') win_loaded_chat = true;
 
-        //     if(win_loaded_main === true && win_loaded_chat === true){
-        //         this.ipcStart();
-        //     }
-        // });
-
+    //         if(win_loaded_main === true && win_loaded_chat === true){
+    //             this.ipcStart();
+    //         }
+    //     });
+    // },
+    _win_load_check: function() {
         if(win_loaded_main === true && win_loaded_chat === true){
-            this.ipcStart();
+            this._all_window_loaded();
         }
     },
-    ipcStart: function(){
+    _all_window_loaded: function(){
+        this._create_tray();
+        handleIpcEvent.init();
+        
+        this._ipcStart();
+    },
+    _ipcStart: function(){
         win['main'].webContents.send('win-loaded', 'all-windows-loaded');
         win['chat'].webContents.send('win-loaded', 'all-windows-loaded');
+    },
+    _create_tray: function() {
+        // 畫面右下的系統圖示
+        tray = new Tray( path.join(__dirname, 'assets/img/app.ico') );
+
+        const template = [
+            {label: 'BABANANA Chat Desktop', enabled: false},
+            {type: 'separator'},
+            // {label: '置頂', type: 'checkbox', checked: true, click(e){
+            //     //console.log(e.checked);
+            //     e.checked? win['main'].setAlwaysOnTop(true) : win['main'].setAlwaysOnTop(false);
+            // }},
+            // {label: '防止點擊', type: 'checkbox', checked: false, click(e){
+            //     //console.log(e.checked);
+            //     e.checked? win['main'].setIgnoreMouseEvents(true) : win['main'].setIgnoreMouseEvents(false);
+            // }},
+            // {type: 'separator'},
+            {label: '重新整理', click() { win['main'].webContents.reload(); } },
+            {type: 'separator'},
+            {label: '說明', click() { electron.shell.openExternal('https://hackmd.io/s/B183d6iwG') } },
+            {label: '關閉', click() { app.quit(); } }
+        ];
+
+        const contextMenu = Menu.buildFromTemplate(template);
+
+        tray.setToolTip('BABANANA Chat Desktop');
+        tray.setContextMenu(contextMenu);
+        /*
+        tray.on('click', (event) => {
+            console.log(event);
+        });
+        */
+    }
+};
+
+const handleIpcEvent = {
+    init: function(){
+        ipcMain.on('app-quit', (event, arg) => {
+            this._app_quit();
+        });
+        ipcMain.on('open-url', (event, arg) => {
+            this._open_url(arg);
+        });
+        ipcMain.on('window-minimize', (event, arg) => {
+            this._window_minimize(arg);
+        });
+    },
+    _app_quit: function(){
+        app.quit();
+    },
+    _open_url: function(url_string){
+        shell.openExternal(url_string);
+    },
+    _window_minimize: function(win_name){
+        win[win_name].minimize();
     }
 };
 
@@ -224,8 +242,12 @@ const createWindow = {
 // 部分 API 在 ready 事件觸發後才能使用。
 //app.on('ready', createWindow); //舊
 app.whenReady().then(()=>{
-    createWindow.main();
-    createWindow.chat();
+    //取得桌面可使用區域寬高 (通常是螢幕解析度扣掉系統工具列)
+    let screen_size = screen.getPrimaryDisplay().workAreaSize;
+    //console.log(screen_size.width, screen_size.height);
+    
+    createWindow.main(screen_size);
+    createWindow.chat(screen_size);
 
     // setTimeout(()=>{
         

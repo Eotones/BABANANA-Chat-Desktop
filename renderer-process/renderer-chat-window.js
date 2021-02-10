@@ -15,10 +15,18 @@ document.addEventListener('DOMContentLoaded', function () {
             //ipc code..
         }
     });
+
+    let i = 0;
     
     //ipcRenderer
     ipcRenderer.on('main-to-chat', (event, message) => {
         //console.log(message); // Prints 'whoooooooh!'
         document.querySelector("#footer_msg").textContent = `接收: ${message}`;
+
+        if(i < 20){ //測試用
+            document.querySelector("main.js-content").innerHTML += `<div>${message}</div>`;
+            i++
+        }
+        
     });
 });
