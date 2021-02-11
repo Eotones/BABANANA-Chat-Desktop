@@ -3,6 +3,41 @@ console.log('[renderer-process] start');
 
 const {ipcRenderer} = require('electron');
 
+const win_name = 'chat';
+const chat_limit = 50;
+
+const chat_main = {
+    get_chat_dom: function() {
+        this.dom = document.querySelector("#output");
+    },
+    writeToScreen: function(message, class_name_arr){
+        let pre = document.createElement("div");
+
+        pre.classList.add("output_lines");
+        if (typeof class_name_arr !== "undefined") {
+            pre.classList.add(...class_name_arr);
+        } else {
+            pre.classList.add("kk_chat");
+        }
+
+        message = message.trim();
+
+        pre.textContent = message;
+
+        this.dom.appendChild(pre);
+
+        this.scroll_to_bottom_auto();
+
+        while(this.dom.childElementCount > chat_limit){
+            this.dom.removeChild(this.dom.childNodes[0]); 
+        }
+
+        this.scroll_to_bottom_auto();
+    },
+    scroll_to_bottom_auto: function () { //畫面自動捲動
+        this.dom.parentElement.scrollTo(0, this.dom.scrollHeight); //畫面自動捲動
+    },
+};
 
 document.addEventListener('DOMContentLoaded', function () {
     //傳送視窗載入完成狀態
@@ -16,17 +51,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    let i = 0;
-    
+    chat_main.get_chat_dom();
+
     //ipcRenderer
     ipcRenderer.on('main-to-chat', (event, message) => {
         //console.log(message); // Prints 'whoooooooh!'
         document.querySelector("#footer_msg").textContent = `接收: ${message}`;
 
-        if(i < 20){ //測試用
-            document.querySelector("main.js-content").innerHTML += `<div>${message}</div>`;
-            i++
-        }
+        chat_main.writeToScreen(message);
         
     });
 });

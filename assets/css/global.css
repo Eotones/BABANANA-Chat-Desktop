@@ -115,12 +115,21 @@ header {
 
 .content {
     /*padding: 10px;*/
-    overflow: hidden;
+    /*overflow: hidden;*/
     position: fixed;
     top: calc(var(--app-title-height) + var(--top-menu-height));
     right: 0;
     bottom: var(--footer-height);
     left: 0;
+    /*border: 1px solid rgba(0, 0, 0, 0);*/
+
+    overflow-y: scroll;
+}
+
+#output {
+    min-width: 100%;
+    min-height: 100%;
+    padding: 10px;
 }
 
 #wv_kk {
@@ -156,4 +165,26 @@ footer {
     left: 0;
 
     padding: 0 1em;
+}
+
+
+/* scrollbar css */
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba(100, 100, 100, 0.5);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(200, 200, 200, 0.5);; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(200, 200, 200, 0.9);; 
 }

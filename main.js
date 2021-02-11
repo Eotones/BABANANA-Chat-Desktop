@@ -37,7 +37,30 @@ let win_loaded_chat = false;
 // https://electronjs.org/docs/api/tray
 let tray = null;
 
+//控制各process的console.log()開關
+const _console = {
+    init: function(){
+        this.DEBUG_MODE = {
+            main_process: true,
+            renderer_main: true, //renderer_process
+            renderer_chat: true, //renderer_process
+        };
 
+        this._renderer_process();
+    },
+    log: function(arg){ //main_process
+        this.DEBUG_MODE.main_process && console.log('main_process', arg);
+    },
+    _renderer_process: function(){
+        ipcMain.on('console-log-main', (event, arg) => {
+            this.DEBUG_MODE.renderer_main && console.log('[renderer-process-main]', arg);
+        });
+        ipcMain.on('console-log-chat', (event, arg) => {
+            this.DEBUG_MODE.renderer_chat && console.log('[renderer-process-chat]', arg);
+        });
+    }
+};
+_console.init();
 
 
 const createWindow = {
@@ -74,6 +97,8 @@ const createWindow = {
             // 通常會把多個 window 對象存放在一個數組裡面，
             // 與此同時，你應該刪除相應的元素。
             win = null;
+
+            app.quit(); //關掉其中一個視窗就把app全關掉(防bug,暫時用)
         });
 
         /*
@@ -131,13 +156,15 @@ const createWindow = {
             // 通常會把多個 window 對象存放在一個數組裡面，
             // 與此同時，你應該刪除相應的元素。
             win = null;
+
+            app.quit(); //關掉其中一個視窗就把app全關掉(防bug,暫時用)
         });
 
         win['chat'].webContents.on('did-finish-load', () => {
             win_loaded_chat = true;
             this._win_load_check();
             
-            win['chat'].setIgnoreMouseEvents(true); //防止點擊
+            //win['chat'].setIgnoreMouseEvents(true); //防止點擊
             
             //win['chat'].webContents.send('ping', 'whoooooooh!');
 
