@@ -28,6 +28,7 @@ const window_size = {
 let win = [];
 // let win_main;
 // let win_chat;
+app.enableSandbox(); //app.enableSandbox can be used to force sandbox: true for all BrowserWindow instances.
 
 //偵測視窗載入狀態
 let win_loaded_main = false;
