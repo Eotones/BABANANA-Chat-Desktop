@@ -15,7 +15,7 @@ const {
 // remote 可以調用 main 進程對象的方法
 //const path = remote.require('path');
 
-const date_format = remote.require('date-format');
+const date_format = remote.require('date-format'); //sandbox模式下要用remote才能引用node.js的package
 
 const win_name = 'main';
 

@@ -80,7 +80,7 @@ const createWindow = {
                 //nodeIntegration: true, //同上, 在index.html中啟用require()
                 contextIsolation: true,
                 enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
-                sandbox: true, //開啟sandbox模式提高安全性
+                sandbox: true, //開啟sandbox模式提高安全性 (官方文件: https://www.electronjs.org/docs/api/sandbox-option )
                 preload: path.join(app.getAppPath(), 'renderer-process/renderer-main.js')
             },
         });
@@ -141,7 +141,7 @@ const createWindow = {
                 //nodeIntegration: true, //同上, 在index.html中啟用require()
                 contextIsolation: true,
                 //enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
-                sandbox: true, //開啟sandbox模式提高安全性
+                sandbox: true, //開啟sandbox模式提高安全性 (官方文件: https://www.electronjs.org/docs/api/sandbox-option )
                 preload: path.join(app.getAppPath(), 'renderer-process/renderer-chat-window.js')
             },
         });
