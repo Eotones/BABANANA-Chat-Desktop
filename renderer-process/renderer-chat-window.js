@@ -9,6 +9,8 @@ const chat_limit = 50;
 const chat_main = {
     get_chat_dom: function() {
         this.dom = document.querySelector("#output");
+        this.dom_heat = document.querySelector("#heat");
+        this.dom_view = document.querySelector("#view");
     },
     writeToScreen: function(message, class_name_arr){
         let pre = document.createElement("div");
@@ -37,6 +39,12 @@ const chat_main = {
     scroll_to_bottom_auto: function () { //畫面自動捲動
         this.dom.parentElement.scrollTo(0, this.dom.scrollHeight); //畫面自動捲動
     },
+    display_heat: function(arg){
+        this.dom_heat.textContent = `●熱度: ${arg}`;
+    },
+    display_view: function(arg){
+        this.dom_view.textContent = `●觀眾數: ${arg}`;
+    }
 };
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -58,7 +66,18 @@ document.addEventListener('DOMContentLoaded', function () {
         //console.log(message); // Prints 'whoooooooh!'
         document.querySelector("#footer_msg").textContent = `接收: ${message}`;
 
+        //chat_main.writeToScreen(message);
+    });
+
+    ipcRenderer.on('main-to-chat-2', (event, message) => {
         chat_main.writeToScreen(message);
-        
+    });
+
+    ipcRenderer.on('main-to-chat-heat', (event, arg) => {
+        chat_main.display_heat(arg);
+    });
+
+    ipcRenderer.on('main-to-chat-view', (event, arg) => {
+        chat_main.display_view(arg);
     });
 });
