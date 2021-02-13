@@ -6,13 +6,13 @@ const {app, BrowserWindow, Menu, Tray, ipcMain, screen, shell} = electron;
 const path = require('path');
 //const url = require('url');
 
-//const date_format = require('./libs/date_format.js');
+//const date_format = require('date-format');
 
 // 定義系統選單+右鍵選單
 //require('./common-process/context-menu');
 
 //視窗大小
-const window_size = {
+const window_config = {
     main: {
         width: 700,
         height: 500
@@ -26,8 +26,7 @@ const window_size = {
 // 保持一個對於 window 對象的全局引用，如果你不這樣做，
 // 當 JavaScript 對象被垃圾回收， window 會被自動地關閉
 let win = [];
-// let win_main;
-// let win_chat;
+
 app.enableSandbox(); //app.enableSandbox can be used to force sandbox: true for all BrowserWindow instances.
 
 //偵測視窗載入狀態
@@ -68,13 +67,13 @@ const createWindow = {
     main: function(screen_size){
         // 創建瀏覽器窗口。
         win['main'] = new BrowserWindow({
-            width: window_size.main.width,
-            height: window_size.main.height,
+            width: window_config.main.width,
+            height: window_config.main.height,
             //transparent: true, //視窗透明
             backgroundColor: '#000000',
             frame: false, //視窗外框
             alwaysOnTop: false, //視窗置頂
-            x: (screen_size.width - window_size.chat.width - window_size.main.width -10),
+            x: (screen_size.width - window_config.chat.width - window_config.main.width -10),
             y: 200,
             webPreferences: {
                 //webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
@@ -86,7 +85,7 @@ const createWindow = {
             },
         });
 
-        //win.setIgnoreMouseEvents(true); //滑鼠點擊穿透
+        //win['main'].setIgnoreMouseEvents(true); //滑鼠點擊穿透
 
         // 然後加載應用的 index.html。
         win['main'].loadFile( path.join(__dirname, 'renderer-process/renderer-main.html') );
@@ -104,11 +103,9 @@ const createWindow = {
             app.quit(); //關掉其中一個視窗就把app全關掉(防bug,暫時用)
         });
 
-        /*
-        win.webContents.executeJavaScript(`
-            document.getElementById("winButtonClose").addEventListener('click',function(){win.close()});
-        `);
-        */
+        // win['main'].webContents.executeJavaScript(`
+        //     document.getElementById("winButtonClose").addEventListener('click',function(){win.close()});
+        // `);
 
         win['main'].webContents.on('did-finish-load', () => {
             win_loaded_main = true;
@@ -129,13 +126,13 @@ const createWindow = {
     chat: function(screen_size){
         // 創建瀏覽器窗口。
         win['chat'] = new BrowserWindow({
-            width: window_size.chat.width,
-            height: window_size.chat.height,
+            width: window_config.chat.width,
+            height: window_config.chat.height,
             transparent: true, //視窗透明
             //backgroundColor: '#000000',
             frame: false, //視窗外框
             alwaysOnTop: true, //視窗置頂
-            x: (screen_size.width - window_size.chat.width),
+            x: (screen_size.width - window_config.chat.width),
             y: 200,
             webPreferences: {
                 //webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
@@ -147,7 +144,7 @@ const createWindow = {
             },
         });
 
-        //win.setIgnoreMouseEvents(true); //滑鼠點擊穿透
+        //win['chat'].setIgnoreMouseEvents(true); //滑鼠點擊穿透
 
         // 然後加載應用的 index.html。
         win['chat'].loadFile( path.join(__dirname, 'renderer-process/renderer-chat-window.html') );
