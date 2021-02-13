@@ -76,10 +76,12 @@ const createWindow = {
             x: (screen_size.width - window_size.chat.width - window_size.main.width -10),
             y: 200,
             webPreferences: {
-                webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
-                nodeIntegration: true, //同上, 在index.html中啟用require()
+                //webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
+                //nodeIntegration: true, //同上, 在index.html中啟用require()
                 //contextIsolation: false,
                 enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
+                sandbox: true, //開啟sandbox模式提高安全性
+                preload: path.join(app.getAppPath(), 'renderer-process/renderer-main.js')
             },
         });
 
@@ -89,7 +91,7 @@ const createWindow = {
         win['main'].loadFile( path.join(__dirname, 'renderer-process/renderer-main.html') );
 
         // 打開開發者工具。
-        //win.webContents.openDevTools();
+        win['main'].webContents.openDevTools();
 
         // 當 window 被關閉，這個事件會被觸發。
         win['main'].on('closed', () => {
@@ -135,10 +137,12 @@ const createWindow = {
             x: (screen_size.width - window_size.chat.width),
             y: 200,
             webPreferences: {
-                webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
-                nodeIntegration: true, //同上, 在index.html中啟用require()
+                //webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
+                //nodeIntegration: true, //同上, 在index.html中啟用require()
                 //contextIsolation: false,
-                enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
+                //enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
+                sandbox: true, //開啟sandbox模式提高安全性
+                preload: path.join(app.getAppPath(), 'renderer-process/renderer-chat-window.js')
             },
         });
 

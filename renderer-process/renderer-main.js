@@ -5,15 +5,19 @@ console.log('[renderer-process] start');
 // https://electronjs.org/docs/api/webview-tag
 
 const {
-    //remote,
+    remote,
     ipcRenderer
 } = require('electron');
-//const {Menu, MenuItem} = remote;
+// const {
+//     //Menu,
+//     //MenuItem,
+// } = remote;
 // remote 可以調用 main 進程對象的方法
+//const path = remote.require('path');
+
+const date_format = remote.require('date-format');
 
 const win_name = 'main';
-
-const date_format = require('../libs/date_format.js');
 
 //const win_main = remote.getCurrentWindow();
 //const webview = document.getElementById('wv_kk');
@@ -102,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if(message === 'all-windows-loaded') {
             setInterval(() => {
                 let datetime = date_format.format(new Date());
+                //let datetime = new Date();
                 document.querySelector("#footer_msg").textContent = `傳送: ${datetime}`;
         
                 //使用ipc通訊讓兩個視窗進行通訊
@@ -205,11 +210,11 @@ document.addEventListener('DOMContentLoaded', function () {
 // });
 
 // 將網頁中的連結開在外部瀏覽器
-webview.addEventListener('new-window', (e) => {
-    const protocol = require('url').parse(e.url).protocol;
-    if (protocol === 'http:' || protocol === 'https:') {
-        //shell.openExternal(e.url);
-        ipcRenderer.send('open-url', e.url);
-    }
-});
+// webview.addEventListener('new-window', (e) => {
+//     const protocol = require('url').parse(e.url).protocol;
+//     if (protocol === 'http:' || protocol === 'https:') {
+//         //shell.openExternal(e.url);
+//         ipcRenderer.send('open-url', e.url);
+//     }
+// });
 
