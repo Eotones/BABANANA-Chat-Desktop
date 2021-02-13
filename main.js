@@ -78,7 +78,7 @@ const createWindow = {
             webPreferences: {
                 //webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
                 //nodeIntegration: true, //同上, 在index.html中啟用require()
-                //contextIsolation: false,
+                contextIsolation: true,
                 enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
                 sandbox: true, //開啟sandbox模式提高安全性
                 preload: path.join(app.getAppPath(), 'renderer-process/renderer-main.js')
@@ -91,7 +91,7 @@ const createWindow = {
         win['main'].loadFile( path.join(__dirname, 'renderer-process/renderer-main.html') );
 
         // 打開開發者工具。
-        win['main'].webContents.openDevTools();
+        //win['main'].webContents.openDevTools();
 
         // 當 window 被關閉，這個事件會被觸發。
         win['main'].on('closed', () => {
@@ -139,7 +139,7 @@ const createWindow = {
             webPreferences: {
                 //webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
                 //nodeIntegration: true, //同上, 在index.html中啟用require()
-                //contextIsolation: false,
+                contextIsolation: true,
                 //enableRemoteModule: true, //Electron >=9 之後禁用 remote,要透過這個設定值打開
                 sandbox: true, //開啟sandbox模式提高安全性
                 preload: path.join(app.getAppPath(), 'renderer-process/renderer-chat-window.js')
@@ -152,7 +152,7 @@ const createWindow = {
         win['chat'].loadFile( path.join(__dirname, 'renderer-process/renderer-chat-window.html') );
 
         // 打開開發者工具。
-        //win.webContents.openDevTools();
+        //win['chat'].webContents.openDevTools();
 
         // 當 window 被關閉，這個事件會被觸發。
         win['chat'].on('closed', () => {
