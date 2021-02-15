@@ -1,3 +1,60 @@
 :root {
-    --color-bg: # 000;
+    --color-bg: #000;
+
+    --app-title-height: 40px;
+    --top-menu-height: 30px;
+    --footer-height: 40px;
+
+    /* font-family */
+    --font-bold: "Microsoft YaHei", "Microsoft JhengHei", Arial, 'LiHei Pro', sans-serif;
+    --font-normal: "Microsoft JhengHei", "Microsoft YaHei", Arial, 'LiHei Pro', sans-serif;
+
+    /* text-shadow */
+    --text-shadow-black-for-desk: 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 0px 0px 1px, 
+        #000 1px 1px 3px;
+    
+    --text-shadow-black:
+        -2px -2px 0 #000000ff,
+        -2px -1px 0 #000000ff,
+        -2px 0px 0 #000000ff,
+        -2px 1px 0 #000000ff,
+        -2px 2px 0 #000000ff,
+        -1px -2px 0 #000000ff,
+        -1px -1px 0 #000000ff,
+        -1px 0px 0 #000000ff,
+        -1px 1px 0 #000000ff,
+        -1px 2px 0 #000000ff,
+        0px -2px 0 #000000ff,
+        0px -1px 0 #000000ff,
+        0px 0px 0 #000000ff,
+        0px 1px 0 #000000ff,
+        0px 2px 0 #000000ff,
+        1px -2px 0 #000000ff,
+        1px -1px 0 #000000ff,
+        1px 0px 0 #000000ff,
+        1px 1px 0 #000000ff,
+        1px 2px 0 #000000ff,
+        2px -2px 0 #000000ff,
+        2px -1px 0 #000000ff,
+        2px 0px 0 #000000ff,
+        2px 1px 0 #000000ff,
+        2px 2px 0 #000000ff;
+
+    /* light color */
+    --color-light-blue: #1dddf8;
+    --color-light-red: #f45054;
+    --color-light-yellow: #eaf10e;
+    --color-light-pink: #f13f82;
+    --color-light-green: #97D74A;
 }

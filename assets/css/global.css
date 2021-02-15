@@ -1,13 +1,10 @@
+@charset "UTF-8";
 @import url("./variables.css");
 @import url("../../node_modules/bootstrap-icons/font/bootstrap-icons.css"); /*bootstrap-icons字體*/
 
 * {
     -webkit-app-region: no-drag; /*不可點選拖曳視窗的區域*/
     box-sizing: border-box;
-
-    --app-title-height: 40px;
-    --top-menu-height: 30px;
-    --footer-height: 40px;
 }
 
 html {
@@ -24,15 +21,31 @@ body {
     height: 100%;
     box-sizing: border-box;
 
-    font-family: "Microsoft JhengHei", "Microsoft YaHei", Arial, 'LiHei Pro', sans-serif;
+    font-family: var(--font-norma);
+}
+body#main-window {
+    background-color: rgba(0, 0, 0, 1);
+}
+body#chat-window {
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
+a,a:link { color: #5E8C88; text-decoration: underline; }
+a:visited { color: #5E8C88; text-decoration: underline; }
+a:hover { color: #97D74A; text-decoration: underline; }
+a:active { color: #FF3333; }
+
 header {
+    user-select: none;
+    
     background-color: rgba(0, 0, 0, 0.5);
     color: #000;
     font-size: 1rem;
 
     min-height: var(--app-title-height);
+}
+#chat-window header {
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 #app_title {
@@ -53,15 +66,16 @@ header {
     -webkit-app-region: drag; /*可點選拖曳視窗的區域*/
     pointer-events: none; /*可穿透圖層(滑鼠點不到)*/
     width: 100%;
+    user-select: none;
     
     /*background-color: rgba(0, 0, 0, 0.5);*/
 }
 
-.win_btns {
+/* .win_btns {
     position: fixed;
     top: 0;
     right: 0;
-}
+} */
 .winButton {
     padding: 10px;
     display: inline-block;
@@ -81,6 +95,7 @@ header {
     padding: 0 0 0 0;
     font-size: 14px;
     color: #ccc;
+    border-bottom: 1px solid transparent;
 }
 
 .top_menu button {
@@ -98,22 +113,21 @@ header {
 }
 
 .top_menu_left {
-    float: left;
+    /*float: left;*/
     height: var(--top-menu-height);
 }
 .top_menu_right {
-    float: right;
+    /*float: right;*/
     height: var(--top-menu-height);
 }
 .top_menu_right button {
     margin: 0 0 0 1px;
 }
-.clear_both {
+/* .clear_both {
     clear: both;
-    border-bottom: 1px solid transparent;
-}
+} */
 
-.content {
+main {
     /*padding: 10px;*/
     /*overflow: hidden;*/
     position: fixed;
@@ -123,7 +137,14 @@ header {
     left: 0;
     /*border: 1px solid rgba(0, 0, 0, 0);*/
 
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
+}
+
+#chat-window main {
+    top: var(--app-title-height);
+    bottom: 0;
+    overflow: hidden;
+    overflow-y: hidden;
 }
 
 #output {
@@ -150,8 +171,31 @@ input, button {
 }
 */
 
+.content_box {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /*border: 5px solid gray;*/
+    background-color: rgba(20, 20, 20, 1);
+    color: #eee;
+    padding: 10px;
+    overflow-y: scroll;
+}
+
+#content_left {
+    right: 50%;
+}
+
+#content_right {
+    left: 50%;
+    background-color: rgba(30, 30, 30, 1);
+}
 
 footer {
+    user-select: none;
+    
     background-color: rgba(0, 0, 0, 0.5);
     color: #aaa;
     font-size: 0.8rem;
@@ -187,4 +231,36 @@ footer {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(200, 200, 200, 0.9);; 
+}
+
+
+/* flex */
+.d-flex {
+    display: flex;
+}
+
+.flex-auto {
+    flex: auto;
+}
+
+.flex-shrink-0 {
+    flex-shrink: 0;
+}
+
+
+/* btn */
+.btn {
+    position: relative;
+    display: inline-block;
+    /*padding: 5px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;*/
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    /*border: 1px solid;
+    border-radius: 6px;*/
+    appearance: none;
 }

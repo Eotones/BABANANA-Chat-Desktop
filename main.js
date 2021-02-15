@@ -5,6 +5,7 @@ const electron = require('electron');
 const {app, BrowserWindow, Menu, Tray, ipcMain, screen, shell} = electron;
 const path = require('path');
 //const url = require('url');
+//const URL = require('url').URL
 const BabananaChatNode = require('babanana-chat-node');
 
 //const date_format = require('date-format');
@@ -15,12 +16,12 @@ const BabananaChatNode = require('babanana-chat-node');
 //視窗大小
 const window_config = {
     main: {
-        width: 700,
-        height: 500
+        width: 1050,
+        height: 800
     },
     chat: {
         width: 350,
-        height: 500
+        height: 800
     }
 };
 
@@ -75,7 +76,7 @@ const createWindow = {
             frame: false, //視窗外框
             alwaysOnTop: false, //視窗置頂
             x: (screen_size.width - window_config.chat.width - window_config.main.width -10),
-            y: 200,
+            y: 100,
             webPreferences: {
                 //webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
                 //nodeIntegration: true, //同上, 在index.html中啟用require()
@@ -134,7 +135,7 @@ const createWindow = {
             frame: false, //視窗外框
             alwaysOnTop: true, //視窗置頂
             x: (screen_size.width - window_config.chat.width),
-            y: 200,
+            y: 100,
             webPreferences: {
                 //webviewTag: true, //Electron >= 5 之後禁用 <webview>,要透過這個設定值打開
                 //nodeIntegration: true, //同上, 在index.html中啟用require()
@@ -160,6 +161,10 @@ const createWindow = {
             // 與此同時，你應該刪除相應的元素。
             win = null;
 
+            // ipcMain.eventNames().forEach(n => {
+            //     ipcMain.removeAllListeners(n);
+            // });
+
             app.quit(); //關掉其中一個視窗就把app全關掉(防bug,暫時用)
         });
 
@@ -178,7 +183,9 @@ const createWindow = {
         });
 
         ipcMain.on('renderer-to-main', (event, arg) => {
-            win['chat'].webContents.send('main-to-chat', arg);
+            if(win !== null){
+                win['chat'].webContents.send('main-to-chat', arg);
+            }
         });
     },
     // _ipcCheck:function(){
@@ -325,7 +332,7 @@ const langPlayWebsocket = {
                 this.main_to_chat(`[chat/聊天訊息] ${role}${data.name}: ${data.msg}`);
 
                 //含html貼圖
-                let msg_with_sticker = kk_chat.sticker_tag_to_img_html(data.msg, data.vip_fan); //貼圖tag轉html圖片
+                //let msg_with_sticker = kk_chat.sticker_tag_to_img_html(data.msg, data.vip_fan); //貼圖tag轉html圖片
                 //this.main_to_chat(`[chat/聊天訊息] ${role}${data.name}: ${msg_with_sticker}`);
             });
 
@@ -407,10 +414,10 @@ const langPlayWebsocket = {
             //若發生嚴重錯誤則強制中斷程式
             try {
                 //聊天ws
-                await kk_chat.start();
+                //await kk_chat.start();
             
                 //禮物ws
-                await kk_gift.start();
+                //await kk_gift.start();
             } catch (error) {
                 console.error('error');
                 console.error(error);
@@ -419,14 +426,19 @@ const langPlayWebsocket = {
             }
         })();
     },
+    _ipc_main_to_chat: function(channel, arg){
+        if(win !== null){
+            win['chat'].webContents.send(channel, arg);
+        }
+    },
     main_to_chat: function(arg){
-        win['chat'].webContents.send('main-to-chat-2', arg);
+        this._ipc_main_to_chat('main-to-chat-2', arg);
     },
     main_to_chat_heat: function(arg){
-        win['chat'].webContents.send('main-to-chat-heat', arg);
+        this._ipc_main_to_chat('main-to-chat-heat', arg);
     },
     main_to_chat_view: function(arg){
-        win['chat'].webContents.send('main-to-chat-view', arg);
+        this._ipc_main_to_chat('main-to-chat-view', arg);
     }
 };
 
@@ -445,6 +457,19 @@ app.whenReady().then(()=>{
     // setTimeout(()=>{
         
     // }, 3000);
+});
+
+// Disable or limit navigation
+app.on('web-contents-created', (event, contents) => {
+  contents.on('will-navigate', (event, navigationUrl) => {
+    // const parsedUrl = new URL(navigationUrl);
+    // if (parsedUrl.origin !== 'https://example.com') {
+    //   event.preventDefault();
+    // }
+
+    //全部禁用
+    event.preventDefault();
+  });
 });
 
 // Quit when all windows are closed.

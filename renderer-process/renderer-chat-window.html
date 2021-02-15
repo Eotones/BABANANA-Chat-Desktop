@@ -14,12 +14,12 @@
     <link rel="stylesheet" type="text/css" href="../assets/css/global.css">
 </head>
 
-<body>
-    <header class="nav js-nav">
-        <div class="drag">
+<body id="chat-window">
+    <header class="nav js-nav d-flex">
+        <div class="drag flex-auto">
             <h1 id="app_title"><i class="bi bi-chat"></i> <!--<span>BABANANA Chat 2</span>--><span id="heat"></span> <span id="view"></span></h1>
         </div>
-        <div class="win_btns">
+        <div class="win_btns flex-shrink-0">
             <!--<div id="winButtonMinimize" class="winButton">
                 <svg name="TitleBarMinimize" width="12" height="12" viewBox="0 0 12 12">
                     <rect fill="#ffffff" width="10" height="1" x="1" y="6"></rect>
@@ -42,7 +42,7 @@
         </div>
     </header>
 
-    <nav class="top_menu">
+    <!-- <nav class="top_menu">
         <div class="top_menu_left">
             <button>外部</button><button>本機</button>
         </div>
@@ -50,16 +50,16 @@
             <button><i class="bi bi-gear-fill"></i></button>
         </div>
         <div class="clear_both"></div>
-    </nav>
+    </nav> -->
 
     <main class="content js-content">
         <!--<webview id="wv_kk" src="https://banana.eotones.net/"></webview>-->
         <div id="output"></div>
     </main>
 
-    <footer>
+    <!-- <footer>
         <div id="footer_msg">測試</div>
-    </footer>
+    </footer> -->
 
     <!--<script src="./renderer-chat-window.js"></script>-->
 </body>

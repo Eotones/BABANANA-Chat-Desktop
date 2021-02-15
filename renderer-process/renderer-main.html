@@ -14,12 +14,12 @@
     <link rel="stylesheet" type="text/css" href="../assets/css/global.css">
 </head>
 
-<body>
-    <header class="nav js-nav">
-        <div class="drag">
+<body id="main-window">
+    <header class="nav js-nav d-flex">
+        <div class="drag flex-auto">
             <h1 id="app_title"><i class="bi bi-chat"></i> BABANANA Chat</h1>
         </div>
-        <div class="win_btns">
+        <div class="win_btns flex-shrink-0">
             <div id="winButtonMinimize" class="winButton">
                 <svg name="TitleBarMinimize" width="12" height="12" viewBox="0 0 12 12">
                     <rect fill="#ffffff" width="10" height="1" x="1" y="6"></rect>
@@ -42,22 +42,42 @@
         </div>
     </header>
 
-    <nav class="top_menu">
-        <div class="top_menu_left">
-            <button>外部</button><button>本機</button>
+    <nav class="top_menu d-flex">
+        <div class="top_menu_left flex-auto">
+            <button class="btn">外部</button><button class="btn">本機</button>
         </div>
-        <div class="top_menu_right">
-            <button><i class="bi bi-gear-fill"></i></button>
+        <div class="top_menu_right flex-shrink-0">
+            <button class="btn"><i class="bi bi-gear-fill"></i></button>
         </div>
-        <div class="clear_both"></div>
     </nav>
 
     <main class="content js-content">
         <!--<webview id="wv_kk" src="https://banana.eotones.net/"></webview>-->
+        <div id="content_left" class="content_box">測試</div>
+        <div id="content_right" class="content_box">
+            <h3>聊天設定</h3>
+            <div>
+                房號: <input type="text" name="chat_room_id" id="chat_room_id">
+                <input type="button" value="啟用/停用">
+            </div>
+            
+            <h3>聊天視窗設定</h3>
+            <div><label for="cb_alwaysOnTop"><input type="checkbox" id="cb_alwaysOnTop"> 置頂</label></div>
+            <div><label for="cb_ignoreMouse"><input type="checkbox" id="cb_ignoreMouse"> 防止點擊</label></div>
+            <div><label for="cb_transparent"><input type="checkbox" id="cb_transparent"> 透明</label></div>
+            
+            <h3>聊天視窗顯示資訊</h3>
+            <div><label for="cb_chat_msg"><input type="checkbox" id="cb_chat_msg"> 聊天訊息</label></div>
+            <div><label for="cb_gift"><input type="checkbox" id="cb_gift"> 禮物</label></div>
+            <div><label for="cb_bullet"><input type="checkbox" id="cb_bullet"> 浪花語音</label></div>
+            <div><label for="cb_chat_join"><input type="checkbox" id="cb_chat_join"> 進入聊天室</label></div>
+            <div><label for="cb_chat_follow"><input type="checkbox" id="cb_chat_follow"> 追隨</label></div>
+        </div>
     </main>
 
-    <footer>
-        <div id="footer_msg">測試</div>
+    <footer class="d-flex">
+        <div class="flex-auto">測試</div>
+        <div id="footer_msg" class="flex-shrink-0">2</div>
     </footer>
 
     <!--<script src="./renderer-main.js"></script>-->
