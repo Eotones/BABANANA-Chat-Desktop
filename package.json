@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "babanana-chat-node": "github:Eotones/BABANANA-Chat-Node",
-    "bootstrap-icons": "^1.3.0",
+    "bootstrap-icons": "^1.4.1",
     "date-format": "file:libs/date-format"
   }
 }
