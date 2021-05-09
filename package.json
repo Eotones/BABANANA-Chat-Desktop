@@ -13,7 +13,7 @@
   "author": "EOTONES",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^11.2.3",
+    "electron": "^11.4.6",
     "electron-packager": "^15.2.0"
   },
   "dependencies": {
