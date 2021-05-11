@@ -4,7 +4,7 @@ console.log('[renderer-process] start');
 const {ipcRenderer} = require('electron');
 
 const win_name = 'chat';
-const chat_limit = 50;
+const chat_lines_limit = 50;
 
 const chat_main = {
     get_chat_dom: function() {
@@ -30,7 +30,7 @@ const chat_main = {
 
         this.scroll_to_bottom_auto();
 
-        while(this.dom.childElementCount > chat_limit){
+        while(this.dom.childElementCount > chat_lines_limit){
             this.dom.removeChild(this.dom.childNodes[0]); 
         }
 
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //chat_main.writeToScreen(message);
     });
 
-    ipcRenderer.on('main-to-chat-2', (event, message) => {
+    ipcRenderer.on('chat-msg', (event, message) => {
         chat_main.writeToScreen(message);
     });
 

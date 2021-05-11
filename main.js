@@ -6,7 +6,14 @@ const {app, BrowserWindow, Menu, Tray, ipcMain, screen, shell} = electron;
 const path = require('path');
 //const url = require('url');
 //const URL = require('url').URL
+
+// lang live chat - unofficial websocket module (websocket - socket.io)
+// https://github.com/Eotones/BABANANA-Chat-Node
 const BabananaChatNode = require('babanana-chat-node');
+
+// twitch chat - tmi.js (web irc - websocket)
+// https://github.com/tmijs/tmi.js
+const tmi = require('tmi.js');
 
 //const date_format = require('date-format');
 
@@ -211,7 +218,9 @@ const createWindow = {
         handleIpcEvent.init();
         
         this._ipcStart();
-        langPlayWebsocket.init();
+        //langPlayWebsocket.init(); //暫停使用
+
+        twitchTmi.init(); //twitch chat
     },
     _ipcStart: function(){
         win['main'].webContents.send('win-loaded', 'all-windows-loaded');
@@ -274,6 +283,31 @@ const handleIpcEvent = {
     }
 };
 
+const mainProcess_ipc_send = {
+    _mainProcess_to_mainWindow: function(channel, arg){ // to main window
+        if(win !== null){
+            win['main'].webContents.send(channel, arg);
+        }
+    },
+    _mainProcess_to_chatWindow: function(channel, arg){ // to chat window
+        if(win !== null){
+            win['chat'].webContents.send(channel, arg);
+        }
+    },
+    to_chatWindow: function(arg){
+        this._mainProcess_to_chatWindow('chat-msg', arg);
+    },
+    to_chatWindow_heat: function(arg){ // lang熱度
+        this._mainProcess_to_chatWindow('main-to-chat-heat', arg);
+    },
+    to_chatWindow_view: function(arg){ // lang觀眾數
+        this._mainProcess_to_chatWindow('main-to-chat-view', arg);
+    },
+    to_mainWindow: function(arg){
+        this._mainProcess_to_mainWindow('main-to-mainWin', arg);
+    }
+};
+
 const langPlayWebsocket = {
     init: function(){
         const chat_room_id = '2132991'; //國動台2132991
@@ -288,31 +322,31 @@ const langPlayWebsocket = {
             //直播狀態
             kk_chat.on('live-status', (data) => {
                 if(data == "online"){
-                    this.main_to_chat(`[chat/直播狀態] 線上`);
+                    mainProcess_ipc_send.to_chatWindow(`[chat/直播狀態] 線上`);
                 }else{
-                    this.main_to_chat(`[chat/直播狀態] 離線`);
+                    mainProcess_ipc_send.to_chatWindow(`[chat/直播狀態] 離線`);
                 }
             });
 
 
             //連線成功
             kk_chat.on('connect', (data) => {
-                this.main_to_chat(`[chat/連線成功] ${data}`);
+                mainProcess_ipc_send.to_chatWindow(`[chat/連線成功] ${data}`);
             });
 
             //連線中斷
             kk_chat.on('disconnect', () => {
-                this.main_to_chat(`[chat/連線中斷]`);
+                mainProcess_ipc_send.to_chatWindow(`[chat/連線中斷]`);
             });
 
             //認證失敗
             kk_chat.on('unauthorized', (data) => {
-                this.main_to_chat(`[chat/認證失敗] ${data}`);
+                mainProcess_ipc_send.to_chatWindow(`[chat/認證失敗] ${data}`);
             });
 
             //認證成功
             kk_chat.on('authenticated', (data) => {
-                this.main_to_chat(`[chat/認證成功] ${data}`);
+                mainProcess_ipc_send.to_chatWindow(`[chat/認證成功] ${data}`);
             });
 
             //聊天訊息
@@ -329,16 +363,16 @@ const langPlayWebsocket = {
                 }
 
                 //純文字無貼圖
-                this.main_to_chat(`[chat/聊天訊息] ${role}${data.name}: ${data.msg}`);
+                mainProcess_ipc_send.to_chatWindow(`[chat/聊天訊息] ${role}${data.name}: ${data.msg}`);
 
                 //含html貼圖
                 //let msg_with_sticker = kk_chat.sticker_tag_to_img_html(data.msg, data.vip_fan); //貼圖tag轉html圖片
-                //this.main_to_chat(`[chat/聊天訊息] ${role}${data.name}: ${msg_with_sticker}`);
+                //mainProcess_ipc_send.to_chatWindow(`[chat/聊天訊息] ${role}${data.name}: ${msg_with_sticker}`);
             });
 
             //進入訊息
             kk_chat.on('join', (data) => {
-                this.main_to_chat(`[chat/進入訊息] [${data.name}] 進入聊天室`);
+                mainProcess_ipc_send.to_chatWindow(`[chat/進入訊息] [${data.name}] 進入聊天室`);
             });
 
             //錯誤訊息
@@ -352,46 +386,46 @@ const langPlayWebsocket = {
             // ===== gift ws server =====
             //連線成功
             kk_gift.on('connect', (data) => {
-                this.main_to_chat(`[gift/連線成功] ${data}`);
+                mainProcess_ipc_send.to_chatWindow(`[gift/連線成功] ${data}`);
             });
 
             //連線中斷
             kk_gift.on('disconnect', () => {
-                this.main_to_chat(`[gift/連線中斷]`);
+                mainProcess_ipc_send.to_chatWindow(`[gift/連線中斷]`);
             });
 
             //認證成功
             kk_gift.on('authenticated', (data) => {
-                this.main_to_chat(`[gift/認證成功] ${data}`);
+                mainProcess_ipc_send.to_chatWindow(`[gift/認證成功] ${data}`);
             });
 
             //認證失敗
             kk_gift.on('unauthorized', (data) => {
-                this.main_to_chat(`[gift/認證失敗] ${data}`);
+                mainProcess_ipc_send.to_chatWindow(`[gift/認證失敗] ${data}`);
             });
 
             //熱度
             kk_gift.on('_live_heat', (data) => {
                 //this.main_to_chat(`[gift/熱度] ${data}`);
-                this.main_to_chat_heat(data);
+                mainProcess_ipc_send.to_chatWindow_heat(data);
             });
 
             //觀眾數
             kk_gift.on('_live_view', (data) => {
                 //this.main_to_chat(`[gift/觀眾數] ${data}`);
-                this.main_to_chat_view(data);
+                mainProcess_ipc_send.to_chatWindow_view(data);
             });
 
             //禮物
             kk_gift.on('_gift_send', (data) => {
                 let gift_name = kk_gift.gift_id_to_name(data.data.prod_id, '禮物'); //禮物id轉中文名稱,第2個參數是還未取得禮物名稱時的預設名稱
-                this.main_to_chat(`[gift/禮物] ${data.data.f_nickname} 送出 ${data.data.prod_cnt}個 [${gift_name}]`);
-                this.main_to_chat(`[gift/禮物] 禮物圖片連結: ${data.data.img}`)
+                mainProcess_ipc_send.to_chatWindow(`[gift/禮物] ${data.data.f_nickname} 送出 ${data.data.prod_cnt}個 [${gift_name}]`);
+                mainProcess_ipc_send.to_chatWindow(`[gift/禮物] 禮物圖片連結: ${data.data.img}`)
             });
 
             //浪花語音
             kk_gift.on('_bullet_send', (data) => {
-                this.main_to_chat(`[gift/浪花語音] ${data.data.f_nickname}: ${data.data.msg}`);
+                mainProcess_ipc_send.to_chatWindow(`[gift/浪花語音] ${data.data.f_nickname}: ${data.data.msg}`);
             });
 
             //錯誤訊息
@@ -425,20 +459,40 @@ const langPlayWebsocket = {
                 //process.exit(); //強制中斷程式
             }
         })();
-    },
-    _ipc_main_to_chat: function(channel, arg){
-        if(win !== null){
-            win['chat'].webContents.send(channel, arg);
-        }
-    },
-    main_to_chat: function(arg){
-        this._ipc_main_to_chat('main-to-chat-2', arg);
-    },
-    main_to_chat_heat: function(arg){
-        this._ipc_main_to_chat('main-to-chat-heat', arg);
-    },
-    main_to_chat_view: function(arg){
-        this._ipc_main_to_chat('main-to-chat-view', arg);
+    }
+};
+
+const twitchTmi = {
+    init: function(){
+        const twitchClient = new tmi.Client({
+            options: {
+                debug: false,
+                messagesLogLevel: "info"
+            },
+            connection: {
+                reconnect: true,
+                secure: true
+            },
+            identity: {
+                username: 'justinfan12345',
+                password: 'oauth:kappa'
+            },
+            channels: [ 'qttsix' ]
+        });
+        twitchClient.connect().catch(console.error);
+        twitchClient.on('message', (channel, tags, message, self) => {
+            if(self) return;
+            // if(message.toLowerCase() === '!hello') {
+            //     twitchClient.say(channel, `@${tags.username}, heya!`);
+            // }
+        });
+
+        twitchClient.on('chat', (channel, userstate, message, self) => {
+            if(self) return;
+
+            //
+            mainProcess_ipc_send.to_chatWindow(`${userstate['display-name']} : ${message}`);
+        });
     }
 };
 
