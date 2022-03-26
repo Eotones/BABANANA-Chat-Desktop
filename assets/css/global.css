@@ -5,7 +5,8 @@
     box-sizing: border-box;
 
     --app-title-height: 40px;
-    --top-menu-height: 40px;
+    /*--top-menu-height: 40px;*/
+    --top-menu-height: 0px;
 }
 
 html {
@@ -13,7 +14,7 @@ html {
 }
 
 body {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
     color: #fff;
     font-size: 1rem;
 
@@ -40,6 +41,7 @@ nav {
     font-size: 1rem;
     line-height: var(--app-title-height);
     
+    user-select: none;
     pointer-events: none; /*可穿透圖層(滑鼠點不到)*/
     color: #ccc;
     display: block;
@@ -50,6 +52,7 @@ nav {
 }
 
 .drag {
+    
     -webkit-app-region: drag; /*可點選拖曳視窗的區域*/
 
     width: 100%;
@@ -58,11 +61,14 @@ nav {
 }
 
 .win_btns {
+    user-select: none;
+    -webkit-app-region: no-drag;
     position: fixed;
     top: 0;
     right: 0;
 }
 .winButton {
+    user-select: none;
     padding: 10px;
     display: inline-block;
 }
@@ -80,6 +86,7 @@ nav {
     padding: 0 1.5em 0 1.5em;
     font-size: 14px;
     color: #ccc;
+    overflow: hidden;
 }
 
 .content {

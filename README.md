@@ -24,3 +24,11 @@ $ cd BABANANA-Chat-Desktop
 $ npm install
 $ npm start
 ```
+
+## 打包成.exe執行檔
+
+```bash
+$ npm run build_win32
+```
+
+* 如果要打包其他作業系統版本的話請參考: [electron/electron-packager](https://github.com/electron/electron-packager)
