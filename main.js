@@ -2,7 +2,15 @@
 console.log('[main-process] start');
 
 const electron = require('electron');
-const {app, BrowserWindow, Menu, Tray, nativeImage, ipcMain, shell} = electron;
+const {
+    app,
+    BrowserWindow,
+    Menu,
+    Tray,
+    nativeImage,
+    ipcMain,
+    shell
+} = electron;
 const path = require('path');
 //const url = require('url');
 
@@ -87,7 +95,9 @@ const createWindow = () => {
     // });
 
 
-    const icon = nativeImage.createFromPath('assets/img/app.ico');
+    const icon = nativeImage.createFromPath( path.join(__dirname, 'assets/img/icon.png') );
+    //const icon = path.join(__dirname, 'assets/img/icon.png');
+    //const icon = path.join(__dirname, 'assets/img/app.ico');
     // 畫面右下的系統圖示
     tray = new Tray(icon);
 

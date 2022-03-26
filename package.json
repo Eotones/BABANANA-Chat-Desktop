@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron .",
     "build_win64": "electron-packager . BABANANA-Chat-Desktop --out=./build/ --overwrite=true --platform=win32 --arch=x64 --version=0.36.4 --icon=assets/img/app.ico --asar=true --ignore=node_modules/electron-* --ignore=node_modules/.bin --ignore=.git --ignore=dist --prune=true ",
-    "build_win32": "electron-packager . BABANANA-Chat-Desktop --out=./build/ --overwrite=true --platform=win32                             --icon=assets/img/app.ico             --ignore=node_modules/electron-* --ignore=node_modules/.bin --ignore=.git --ignore=dist --prune=true "
+    "build_win32": "electron-packager . BABANANA-Chat-Desktop --out=./build/ --overwrite=true --platform=win32 --ignore=node_modules/electron-* --ignore=node_modules/.bin --ignore=.git --ignore=dist --prune=true "
   },
   "author": "EOTONES",
   "license": "MIT License",
