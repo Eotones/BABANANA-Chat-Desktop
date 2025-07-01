@@ -13,7 +13,7 @@
   "license": "MIT License",
   "devDependencies": {
     "@electron/packager": "^18.3.2",
-    "electron": "^29.3.0"
+    "electron": "^29.3.3"
   },
   "dependencies": {
     "bootstrap-icons": "^1.8.1"
