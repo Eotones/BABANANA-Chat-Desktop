@@ -1,6 +1,6 @@
 {
   "name": "babanana-chat-desktop",
-  "version": "0.8.0",
+  "version": "0.7.2",
   "description": "BABANANA Chat Desktop 為 BABANANA Chat 的桌面版應用程式。",
   "private": true,
   "main": "main.js",
@@ -13,7 +13,7 @@
   "license": "MIT License",
   "devDependencies": {
     "@electron/packager": "^19.1.0",
-    "electron": "^41.0.2"
+    "electron": "37.7.0"
   },
   "dependencies": {
     "bootstrap-icons": "^1.8.1"
