@@ -32,7 +32,7 @@ const path = require('path');
 require('./common-process/context-menu');
 
 //視窗大小
-const window_width = 350;
+const window_width = 320;
 const window_height = 500;
 
 // 保持一個對於 window 對象的全局引用，如果你不這樣做，
@@ -176,16 +176,35 @@ app.on('web-contents-created', (e, contents) => {
     // Check for a webview
     if (contents.getType() == 'webview') {
   
-        // Listen for any new window events
-        contents.on('new-window', async (e2, url) => {
-            e2.preventDefault();
+        // Listen for any new window events (electron.js v21 以下失效, v22 後移除 new-window 事件)
+        // contents.on('new-window', async (e2, url) => {
+        //     e2.preventDefault();
+
+        //     console.log("[Open URL]", url);
+            
+        //     const protocol = (new URL(url)).protocol;
+        //     if (protocol === 'http:' || protocol === 'https:') {
+        //         await shell.openExternal(url);
+        //     }
+        // });
+
+        // v22 後在使用者瀏覽器開啟連結的寫法
+        contents.setWindowOpenHandler(({ url }) => {
 
             console.log("[Open URL]", url);
-            
-            const protocol = (new URL(url)).protocol;
-            if (protocol === 'http:' || protocol === 'https:') {
-                await shell.openExternal(url);
+
+            try {
+                const protocol = new URL(url).protocol;
+
+                if (protocol === 'http:' || protocol === 'https:') {
+                    shell.openExternal(url);
+                }
+            } catch (err) {
+                console.error("[Invalid URL]", url, err);
             }
+
+            // 不讓 Electron 建立自己的 BrowserWindow
+            return { action: 'deny' };
         });
     }
 });
