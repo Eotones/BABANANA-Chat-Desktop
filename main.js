@@ -94,6 +94,29 @@ const createWindow = () => {
     //     mainWindow = null;
     // });
 
+    // v22 後在使用者瀏覽器開啟連結的寫法
+    mainWindow.webContents.on('did-attach-webview', (event, webContents) => {
+
+        webContents.setWindowOpenHandler(({ url }) => {
+
+            console.log("[Open URL]", url);
+
+            try {
+                const protocol = new URL(url).protocol;
+
+                if (protocol === 'http:' || protocol === 'https:') {
+                    setImmediate(() => {
+                        shell.openExternal(url);
+                    });
+                }
+            } catch (err) {
+                console.error("[Invalid URL]", url, err);
+            }
+
+            return { action: 'deny' };
+        });
+    });
+
 
     const icon = nativeImage.createFromPath( path.join(__dirname, 'assets/img/icon.png') );
     //const icon = path.join(__dirname, 'assets/img/icon.png');
@@ -176,7 +199,7 @@ app.on('web-contents-created', (e, contents) => {
     // Check for a webview
     if (contents.getType() == 'webview') {
   
-        // Listen for any new window events (electron.js v21 以下失效, v22 後移除 new-window 事件)
+        // Listen for any new window events (electron.js v21 以下才有效, v22 後移除 new-window 事件)
         // contents.on('new-window', async (e2, url) => {
         //     e2.preventDefault();
 
@@ -191,17 +214,17 @@ app.on('web-contents-created', (e, contents) => {
         // v22 後在使用者瀏覽器開啟連結的寫法
         contents.setWindowOpenHandler(({ url }) => {
 
-            console.log("[Open URL]", url);
+            // console.log("[Open URL]", url);
 
-            try {
-                const protocol = new URL(url).protocol;
+            // try {
+            //     const protocol = new URL(url).protocol;
 
-                if (protocol === 'http:' || protocol === 'https:') {
-                    shell.openExternal(url);
-                }
-            } catch (err) {
-                console.error("[Invalid URL]", url, err);
-            }
+            //     if (protocol === 'http:' || protocol === 'https:') {
+            //         shell.openExternal(url);
+            //     }
+            // } catch (err) {
+            //     console.error("[Invalid URL]", url, err);
+            // }
 
             // 不讓 Electron 建立自己的 BrowserWindow
             return { action: 'deny' };
